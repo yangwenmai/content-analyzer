@@ -10,8 +10,8 @@ upload_endpoint = "https://api.assemblyai.com/v2/upload"
 transcript_endpoint = "https://api.assemblyai.com/v2/transcript"
 
 headers = {
-    "authorization": st.secrets["auth_key"],
-    "content-type": "application/json"
+    "Authorization": st.secrets["auth_key"],
+    "Content-Type": "application/json"
 }
 
 @st.experimental_memo
@@ -61,7 +61,8 @@ def start_analysis(audio_url):
         'iab_categories': True,
         'content_safety': True,
         "summarization": True,
-        "summary_type": "bullets"
+        "summary_type": "bullets",
+        "summary_model": "informative"
     }
 
     transcript_response = requests.post(transcript_endpoint, json=data, headers=headers)
@@ -154,7 +155,7 @@ if file is not None:
 
         # receive the results
         results = get_analysis_results(polling_endpoint)
-
+        
         summary = results.json()['summary']
         topics = results.json()['iab_categories_result']['summary']
         sensitive_topics = results.json()['content_safety_labels']['summary']
